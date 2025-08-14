@@ -1,0 +1,31 @@
+# This file defines the Deployment for our AI Code Reviewer backend.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: code-reviewer-deployment
+  labels:
+    app: code-reviewer
+spec:
+  replicas: 1 # We are using a single-node cluster, so 1 replica is sufficient
+  selector:
+    matchLabels:
+      app: code-reviewer
+  template:
+    metadata:
+      labels:
+        app: code-reviewer
+    spec:
+      containers:
+      - name: code-reviewer-container
+        image: akshat1414/code-reviewer:v9 # Replace with your Docker Hub image
+        ports:
+        - containerPort: 8000 # The port our FastAPI app is running on
+        env:
+        - name: GITHUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: github-token-secret
+              key: token
+        - name: AWS_REGION
+          value: "us-east-1"
+

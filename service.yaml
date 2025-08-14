@@ -1,0 +1,13 @@
+# This file defines the NodePort Service to expose our application.
+apiVersion: v1
+kind: Service
+metadata:
+  name: code-reviewer-service
+spec:
+  type: NodePort # This exposes the service via the EC2 instance's public IP
+  selector:
+    app: code-reviewer
+  ports:
+    - protocol: TCP
+      port: 80 # The service port
+      targetPort: 8000 # The container port
